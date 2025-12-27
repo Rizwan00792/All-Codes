@@ -1,0 +1,30 @@
+---
+- name: File management
+  hosts: all
+  become: true
+  tasks:
+    - name: Create directory
+      file:
+        path: /opt/myapp
+        state: directory
+
+- name: Create an empty file /dvd1
+  ansible.builtin.file:
+    path: /dvd1
+    state: touch
+
+- name: Create file with permissions
+  ansible.builtin.file:
+    path: /dvd1
+    state: touch
+    owner: root
+    group: root
+    mode: '0644'
+
+- name: Create file with content
+  ansible.builtin.copy:
+    dest: /dvd1
+    content: |
+      This is a sample file
+      Created by Ansible
+    mode: '0644'

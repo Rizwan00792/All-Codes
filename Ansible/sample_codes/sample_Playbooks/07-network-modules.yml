@@ -1,0 +1,8 @@
+---
+- name: Network operations
+  hosts: all
+  become: true
+  tasks:
+    - name: Check website
+      uri:
+        url: https://example.com

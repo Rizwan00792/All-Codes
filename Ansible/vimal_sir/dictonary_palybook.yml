@@ -1,0 +1,19 @@
+
+- hosts: all
+  tasks:
+      - copy:
+          src: /etc/passwd
+          dest: /tmp/
+          owner: rizwan
+          group: rizwan
+      - file:
+          path: /tmp/ansible
+          state: directory
+      
+      - yum:
+          name: httpd
+          state: latest
+      - service:
+          name: httpd
+          state: started   # started=for start and stopped=for stop
+          enabled: false   # true and flase 

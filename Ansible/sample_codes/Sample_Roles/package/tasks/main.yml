@@ -1,0 +1,4 @@
+- name: package task
+  package:
+  name: [git, curl]
+  state: present

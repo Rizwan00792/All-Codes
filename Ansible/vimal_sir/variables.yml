@@ -1,0 +1,22 @@
+- hosts: all
+
+  tasks:
+  - package:
+    name:
+    - httpd
+    state: present
+
+  - file:
+      path: "/var/www/rizwan"
+      state: directory
+
+  - copy:
+    src: "/root/rizwan.conf"
+    dest: "/etc/httpd/conf.d/rizwan.conf"
+
+  - service:
+    name: httpd
+    state: restarted
+    enabled: true
+  
+  - 

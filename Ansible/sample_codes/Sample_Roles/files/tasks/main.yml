@@ -1,0 +1,4 @@
+- name: files task
+  file:
+  path: /opt/app
+  state: directory

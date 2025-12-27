@@ -1,0 +1,14 @@
+---
+- name: Core modules example
+  hosts: all
+  become: true
+  tasks:
+    - name: Check connectivity
+      ping:
+    - name: Show OS details
+      debug:
+        msg: "{{ ansible_distribution }} {{ ansible_distribution_version }}"
+    - name: Ensure OS is Linux
+      assert:
+        that:
+          - ansible_system == "Linux"

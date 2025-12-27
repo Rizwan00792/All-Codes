@@ -1,0 +1,73 @@
+---
+# ==========================================================
+# YUM Repository Management & Listing
+# Applicable for:
+# RHEL, CentOS, Rocky Linux, AlmaLinux, Amazon Linux
+# ==========================================================
+
+- name: YUM repolist and repository management
+  hosts: all
+  become: true
+
+  tasks:
+
+    # ------------------------------------------------------
+    # LIST all enabled YUM repositories
+    # There is NO ansible module for repolist
+    # command module is correct and safe here
+    # ------------------------------------------------------
+    - name: List enabled yum repositories
+      command: yum repolist
+      register: yum_repolist
+
+    - name: Show enabled repositories
+      debug:
+        var: yum_repolist.stdout_lines
+
+    # ------------------------------------------------------
+    # LIST all repositories (enabled + disabled)
+    # ------------------------------------------------------
+    - name: List all yum repositories
+      command: yum repolist all
+      register: yum_repolist_all
+
+    - name: Show all repositories
+      debug:
+        var: yum_repolist_all.stdout_lines
+
+    # ------------------------------------------------------
+    # ADD a YUM repository
+    # yum_repository module is used to MANAGE repos
+    # ------------------------------------------------------
+    - name: Add EPEL repository
+      yum_repository:
+        name: epel
+        description: Extra Packages for Enterprise Linux
+        baseurl: https://download.fedoraproject.org/pub/epel/$releasever/Everything/$basearch
+        enabled: yes
+        gpgcheck: yes
+        gpgkey: https://dl.fedoraproject.org/pub/epel/RPM-GPG-KEY-EPEL-9
+
+    # ------------------------------------------------------
+    # DISABLE a repository
+    # ------------------------------------------------------
+    - name: Disable base repository
+      yum_repository:
+        name: base
+        enabled: no
+
+    # ------------------------------------------------------
+    # ENABLE a repository
+    # ------------------------------------------------------
+    - name: Enable epel repository
+      yum_repository:
+        name: epel
+        enabled: yes
+
+    # ------------------------------------------------------
+    # REMOVE a repository completely
+    # ------------------------------------------------------
+    - name: Remove test repository
+      yum_repository:
+        name: test-repo
+        state: absent

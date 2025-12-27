@@ -1,0 +1,7 @@
+---
+- name: Command execution
+  hosts: all
+  become: true
+  tasks:
+    - name: Run uptime
+      command: uptime

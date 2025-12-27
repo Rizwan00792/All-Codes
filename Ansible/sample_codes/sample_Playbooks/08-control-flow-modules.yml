@@ -1,0 +1,8 @@
+---
+- name: Control flow examples
+  hosts: all
+  become: true
+  tasks:
+    - name: Set fact
+      set_fact:
+        app_version: "1.0.0"

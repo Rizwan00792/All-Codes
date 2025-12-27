@@ -1,0 +1,4 @@
+- name: kubernetes task
+  k8s:
+  state: present
+  src: deployment.yml

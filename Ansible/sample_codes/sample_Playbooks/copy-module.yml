@@ -1,0 +1,129 @@
+---
+# ==========================================================
+# Ansible COPY Module – Complete Reference File
+# Author: Rizwan Khan
+# Purpose: VS Code ready cheat-sheet with explanations
+# ==========================================================
+
+- name: COPY module – all examples in one playbook
+  hosts: all
+  become: yes
+
+  tasks:
+
+    # ------------------------------------------------------
+    # 1. BASIC FILE COPY (Controller → Remote)
+    # ------------------------------------------------------
+    - name: Copy a simple file
+      copy:
+        src: files/sample.txt        # File must exist on Ansible controller
+        dest: /tmp/sample.txt        # Destination on remote host
+
+
+    # ------------------------------------------------------
+    # 2. COPY FILE WITH OWNER, GROUP, PERMISSIONS
+    # Best practice for production systems
+    # ------------------------------------------------------
+    - name: Copy file with ownership and permissions
+      copy:
+        src: files/app.conf
+        dest: /etc/app/app.conf
+        owner: root                  # File owner
+        group: root                  # File group
+        mode: '0644'                 # Always quote permissions
+
+
+    # ------------------------------------------------------
+    # 3. COPY DIRECTORY RECURSIVELY
+    # Copies all files and subdirectories
+    # ------------------------------------------------------
+    - name: Copy entire directory
+      copy:
+        src: files/website/          # Directory on controller
+        dest: /var/www/html/         # Directory on remote host
+
+
+    # ------------------------------------------------------
+    # 4. CREATE FILE WITHOUT SOURCE (INLINE CONTENT)
+    # Useful when you don’t want a physical file
+    # ------------------------------------------------------
+    - name: Create file using inline content
+      copy:
+        dest: /tmp/hello.txt
+        content: |
+          Hello Team,
+          This file is created using
+          Ansible copy module.
+        mode: '0644'
+
+
+    # ------------------------------------------------------
+    # 5. COPY FILE WITH BACKUP ENABLED
+    # Creates timestamped backup before overwrite
+    # ------------------------------------------------------
+    - name: Copy file with backup
+      copy:
+        src: files/nginx.conf
+        dest: /etc/nginx/nginx.conf
+        backup: yes                 # Backup stored with timestamp
+
+
+    # ------------------------------------------------------
+    # 6. COPY FILE CONDITIONALLY
+    # Executes only on Debian/Ubuntu systems
+    # ------------------------------------------------------
+    - name: Copy file only on Debian family
+      copy:
+        src: files/debian.conf
+        dest: /etc/app.conf
+      when: ansible_os_family == "Debian"
+
+
+    # ------------------------------------------------------
+    # 7. FORCE COPY (OVERWRITE EVEN IF SAME)
+    # Not recommended unless necessary
+    # ------------------------------------------------------
+    - name: Force overwrite file
+      copy:
+        src: files/force.txt
+        dest: /tmp/force.txt
+        force: yes
+
+
+    # ------------------------------------------------------
+    # 8. COPY FILE AND SET SELINUX CONTEXT
+    # Used on RHEL/CentOS systems
+    # ------------------------------------------------------
+    - name: Copy file with SELinux context
+      copy:
+        src: files/selinux.conf
+        dest: /etc/selinux.conf
+        setype: etc_t
+
+
+    # ------------------------------------------------------
+    # 9. COPY FILE WITH VALIDATION
+    # Validate config before replacing (SAFE)
+    # ------------------------------------------------------
+    - name: Copy nginx config with validation
+      copy:
+        src: files/nginx.conf
+        dest: /etc/nginx/nginx.conf
+        validate: "nginx -t -c %s"
+
+
+    # ------------------------------------------------------
+    # 10. COPY MULTIPLE FILES USING LOOP
+    # ------------------------------------------------------
+    - name: Copy multiple files
+      copy:
+        src: "{{ item }}"
+        dest: /tmp/
+      loop:
+        - files/file1.txt
+        - files/file2.txt
+        - files/file3.txt
+
+# ==========================================================
+# END OF COPY MODULE CHEAT-SHEET
+# ==========================================================

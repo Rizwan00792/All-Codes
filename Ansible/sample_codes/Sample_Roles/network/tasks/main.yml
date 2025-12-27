@@ -1,0 +1,4 @@
+- name: network task
+  ufw:
+  rule: allow
+  port: 80

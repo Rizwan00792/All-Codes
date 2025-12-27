@@ -1,0 +1,7 @@
+---
+- hosts: localhost
+  tasks:
+    - name: Apply Kubernetes manifest
+      k8s:
+        state: present
+        src: deployment.yml

@@ -1,0 +1,124 @@
+---
+# ==========================================================
+# Ansible YUM Module – Complete Usage Playbook
+# Works ONLY on RedHat-based systems:
+# RHEL, CentOS, Rocky Linux, AlmaLinux, Amazon Linux
+# ==========================================================
+
+- name: YUM module examples
+  hosts: all
+  become: true
+
+  tasks:
+
+    # ------------------------------------------------------
+    # Install a package
+    # state: present → ensures package is installed
+    # ------------------------------------------------------
+    - name: Install nginx
+      yum:
+        name: nginx
+        state: present
+
+    # ------------------------------------------------------
+    # Install multiple packages at once
+    # ------------------------------------------------------
+    - name: Install common utilities
+      yum:
+        name:
+          - git
+          - curl
+          - wget
+        state: present
+
+    # ------------------------------------------------------
+    # Install a specific version
+    # ------------------------------------------------------
+    - name: Install specific version of httpd
+      yum:
+        name: httpd-2.4.57
+        state: present
+
+    # ------------------------------------------------------
+    # Update a single package to latest version
+    # state: latest → upgrade if newer version exists
+    # ------------------------------------------------------
+    - name: Update nginx to latest
+      yum:
+        name: nginx
+        state: latest
+
+    # ------------------------------------------------------
+    # Update ALL packages on the system
+    # name: '*' → means every package
+    # ------------------------------------------------------
+    - name: Update all packages
+      yum:
+        name: '*'
+        state: latest
+
+    # ------------------------------------------------------
+    # Remove a package
+    # state: absent → uninstall package
+    # ------------------------------------------------------
+    - name: Remove httpd
+      yum:
+        name: httpd
+        state: absent
+
+    # ------------------------------------------------------
+    # Disable GPG check (not recommended for prod)
+    # Useful in labs or private repos
+    # ------------------------------------------------------
+    - name: Install package without GPG check
+      yum:
+        name: custom-package
+        state: present
+        disable_gpg_check: yes
+
+    # ------------------------------------------------------
+    # Install package from a local RPM file
+    # ------------------------------------------------------
+    - name: Install local RPM
+      yum:
+        name: /tmp/app-release.rpm
+        state: present
+
+    # ------------------------------------------------------
+    # Enable a repository while installing
+    # ------------------------------------------------------
+    - name: Install nginx from epel repo
+      yum:
+        name: nginx
+        state: present
+        enablerepo: epel
+
+    # ------------------------------------------------------
+    # Disable a repository temporarily
+    # ------------------------------------------------------
+    - name: Install package with disabled repo
+      yum:
+        name: nginx
+        state: present
+        disablerepo: base
+
+    # ------------------------------------------------------
+    # Clean yum cache
+    # ------------------------------------------------------
+    - name: Clean yum cache
+      yum:
+        name: '*'
+        state: present
+        update_cache: yes
+
+    # ------------------------------------------------------
+    # Check if package is installed (safe check)
+    # ------------------------------------------------------
+    - name: Check if nginx is installed
+      command: rpm -q nginx
+      register: nginx_check
+      ignore_errors: true
+
+    - name: Show nginx install status
+      debug:
+        msg: "Nginx installed: {{ nginx_check.rc == 0 }}"

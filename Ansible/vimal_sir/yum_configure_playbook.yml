@@ -1,0 +1,26 @@
+- hosts: all
+   become: true
+  tasks:
+  - package:
+      name:
+      - wget
+      - httpd
+      state: present
+
+  - file:
+      path: "/var/www/rizwan"
+      state: directory
+
+  - copy:
+      dest: "/var/www/html/index.html"
+      content: |
+        Hello Team,
+        This file is created using
+        Ansible copy module.
+
+  - service:
+      name: httpd
+      state: started
+      enabled: true
+
+ 

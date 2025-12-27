@@ -1,0 +1,2 @@
+- name: commands task
+  command: uptime
